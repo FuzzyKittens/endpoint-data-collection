@@ -1,7 +1,7 @@
 function New-DeterministicGuid {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
-        "PSUseShouldProcessForStateChangingFunctions", 
-        "", 
+        "PSUseShouldProcessForStateChangingFunctions",
+        "",
         Justification = "Creates in-memory object only."
     )]
     [cmdletbinding()]
