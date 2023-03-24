@@ -26,6 +26,15 @@ jobs:
       - uses: actions/checkout@v3
 
       # Runs a single command using the runners shell
-      - name: Run a one-line script
+      - name: Run build script
         shell: pwsh
         run: ./build/build.ps1
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "Kory Kliner"
+          git config --global user.email "Kory.Kliner@outlook.com"
+
+          git add -A
+          git commit -m "Auto Build"
+          git push
