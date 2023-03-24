@@ -12,24 +12,24 @@ function New-DeterministicGuid {
     return New-Object System.Guid -ArgumentList @(,$hashedBytes)
 }
 
-function Get-MDEProperties {
+function Get-MDEProperty {
     $uniqueProperties = @(
         'SerialNumber'
         'Manufacturer'
         'Product'
     )
     $uniqueString = ''
-    $baseBoard = Get-WmiObject win32_baseboard -Property $uniqueProperties
+    $baseBoard = Get-CimInstance win32_baseboard -Property $uniqueProperties
     foreach ($uniqueProperty in $uniqueProperties) {
         $uniqueString += $($baseBoard.$uniqueProperty)
     }
-    $uniqueString += $(Get-WmiObject Win32_ComputerSystemProduct -Property 'UUID').UUID
+    $uniqueString += $(Get-CimInstance Win32_ComputerSystemProduct -Property 'UUID').UUID
     $masterGuid = New-DeterministicGuid -UniqueString $uniqueString
     $senseGuidRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Advanced Threat Protection'
     $senseGuidValueName = 'senseGuid'
     $senseGuid = [Microsoft.Win32.Registry]::GetValue($senseGuidRegPath, $senseGuidValueName, $null)
 
-    $computerSystem = Get-WmiObject win32_computersystem
+    $computerSystem = Get-CimInstance win32_computersystem
 
     $mdeTagRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Advanced Threat Protection\DeviceTagging'
     $mdeTagRegValueName = 'Group'
@@ -66,8 +66,8 @@ function Get-MDEProperties {
 #TODO: add FQDN / Exposed Service Info
 function Get-NetworkConfig {
     $networkConfig = @()
-    $networkInterfaces = Get-WmiObject -Class Win32_NetworkAdapter | Select-Object *
-    $networkInterfaceConfigurations = Get-WmiObject -Class Win32_NetworkAdapterConfiguration | Select-Object * 
+    $networkInterfaces = Get-CimInstance -Class Win32_NetworkAdapter | Select-Object *
+    $networkInterfaceConfigurations = Get-CimInstance -Class Win32_NetworkAdapterConfiguration | Select-Object *
     foreach ($networkInterface in $networkInterfaces) {
         $networkInterfaceConfiguration = $networkInterfaceConfigurations | Where-Object {$_.InterfaceIndex -eq $networkInterface.Index}
         $properties = [ordered]@{
@@ -87,14 +87,14 @@ function Get-NetworkConfig {
 }
 
 function Get-HardwareConfig {
-    $baseBoard = Get-WmiObject -Class Win32_BaseBoard | Select-Object *
-    $bios = Get-WmiObject -Class Win32_Bios | Select-Object *
-    $computerSystemProduct = Get-WmiObject -Class Win32_ComputerSystemProduct | Select-Object *
-    $processor = Get-WmiObject -Class Win32_Processor | Select-Object *
-    $physicalDisk = Get-WmiObject -Class Win32_DiskDrive | Select-Object *
-    $logicalDisk = Get-WmiObject -Class win32_LogicalDisk | Select-Object *
-    $operatingSystem = Get-WmiObject -Class win32_OperatingSystem | Select-Object *
-    $physicalMemory = Get-WmiObject -Class win32_PhysicalMemory | Select-Object *
+    $baseBoard = Get-CimInstance -Class Win32_BaseBoard | Select-Object *
+    $bios = Get-CimInstance -Class Win32_Bios | Select-Object *
+    $computerSystemProduct = Get-CimInstance -Class Win32_ComputerSystemProduct | Select-Object *
+    $processor = Get-CimInstance -Class Win32_Processor | Select-Object *
+    $physicalDisk = Get-CimInstance -Class Win32_DiskDrive | Select-Object *
+    $logicalDisk = Get-CimInstance -Class win32_LogicalDisk | Select-Object *
+    $operatingSystem = Get-CimInstance -Class win32_OperatingSystem | Select-Object *
+    $physicalMemory = Get-CimInstance -Class win32_PhysicalMemory | Select-Object *
 
     $cpu = @()
     foreach ($node in $processor) {
@@ -159,7 +159,7 @@ function Get-HardwareConfig {
 
 # create the object
 [PSCustomObject]$masterEndpointRecord = [ordered]@{
-    MDEProperties = Get-MDEProperties
+    MDEProperties = Get-MDEProperty
     NetworkConfig = Get-NetworkConfig
     HardwareConfig = Get-HardwareConfig
     }

@@ -2,7 +2,7 @@ $taskName = 'DISA-MER'
 $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -eq $taskName}
 
 if($taskExists) {
-    Write-Host "Success"
+    Write-Output "Success"
     Exit 0
 }
 else {
