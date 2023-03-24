@@ -25,7 +25,7 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.endpoint-data-collection }}
+          token: ${{ secrets.endpoint_data_collection_secret }}
 
       # Runs a single command using the runners shell
       - name: Run build script
