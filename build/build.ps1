@@ -1,6 +1,6 @@
 $baseXmlPath = '.\source\Scheduled-TaskBase.xml'
 $scriptPath = '.\source\Get-Data.ps1'
-$releaseXmlPath = '.\intune\Scheduled-Task.xml'
+$releaseXmlPath = ".\intune\Scheduled-Task.xml"
 
 [xml]$baseXml = Get-Content -Path $baseXmlPath
 $script = Get-Content -Path $scriptPath -Raw
