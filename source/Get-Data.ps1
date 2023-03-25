@@ -162,29 +162,29 @@ function Get-HardwareConfig {
     return $hwConfig
 }
 
-# create the object
-[PSCustomObject]$masterEndpointRecord = [ordered]@{
-    GeneralConfig = Get-GeneralConfig
-    NetworkConfig = Get-NetworkConfig
-    HardwareConfig = Get-HardwareConfig
+try {
+    # create the object
+    [PSCustomObject]$masterEndpointRecord = [ordered]@{
+        GeneralConfig = Get-GeneralConfig
+        NetworkConfig = Get-NetworkConfig
+        HardwareConfig = Get-HardwareConfig
+        }
+
+    # log data
+    $eventSource = 'MasterEndpointRecord'
+    $eventLog = 'System'
+    $eventType = 'Information'
+    $eventId = 5075
+    $eventMessage = ConvertTo-Json -InputObject $masterEndpointRecord -Depth 5
+    $category = 0
+
+    # create the log source if not exists
+    if (-not [System.Diagnostics.EventLog]::SourceExists($eventSource)) {
+        #[System.Diagnostics.EventLog]::new($eventSource, $eventLog)
+        New-EventLog -LogName $eventLog -Source $eventSource
     }
 
-# log data
-$eventSource = 'MasterEndpointRecord'
-$eventLog = 'System'
-$eventType = 'Information'
-$eventId = 5075
-$eventMessage = ConvertTo-Json -InputObject $masterEndpointRecord -Depth 5
-$category = 0
-
-# create the log source if not exists
-if (-not [System.Diagnostics.EventLog]::SourceExists($eventSource)) {
-    #[System.Diagnostics.EventLog]::new($eventSource, $eventLog)
-    New-EventLog -LogName $eventLog -Source $eventSource
-}
-
-# write the data to the event log
-try {
+    # write the data to the event log
     Write-EventLog -LogName $eventLog -Source $eventSource -EventId $eventId -EntryType $eventType -Message $eventMessage -Category $category
 }
 catch {
