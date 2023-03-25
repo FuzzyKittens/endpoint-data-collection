@@ -25,6 +25,7 @@ jobs:
 
       - name: Install Wine
         run: sudo apt-get install wine
+        run: sudo apt-get install wine32
 
       - name: Run intunewin utility
         run: wine ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
