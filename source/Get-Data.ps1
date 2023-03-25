@@ -1,3 +1,4 @@
+#test release
 function New-DeterministicGuid {
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute(
         "PSUseShouldProcessForStateChangingFunctions",
