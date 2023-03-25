@@ -17,7 +17,7 @@ function New-DeterministicGuid {
     return New-Object System.Guid -ArgumentList @(,$hashedBytes)
 }
 
-function Get-MDEProperty {
+function Get-GeneralConfig {
     $uniqueProperties = @(
         'SerialNumber'
         'Manufacturer'
@@ -47,7 +47,7 @@ function Get-MDEProperty {
         $masterGUIDPrevious = $null
     }
 
-    [PSCustomObject]$mdeProperties = [ordered]@{
+    [PSCustomObject]$GeneralConfig = [ordered]@{
         MasterGUID = $masterGuid
         MasterGUIDPrevious = $masterGUIDPrevious
         SenseGUID = $senseGuid
@@ -60,12 +60,12 @@ function Get-MDEProperty {
     }
 
     # Write the hashtable to the registry
-    $mdeProperties.keys | ForEach-Object {
-        if ($null -ne $mdeProperties[$_]) {
-            [Microsoft.Win32.Registry]::SetValue($merRegPath, $_, $mdeProperties[$_])
+    $GeneralConfig.keys | ForEach-Object {
+        if ($null -ne $GeneralConfig[$_]) {
+            [Microsoft.Win32.Registry]::SetValue($merRegPath, $_, $GeneralConfig[$_])
         }
     }
-    return $mdeProperties
+    return $GeneralConfig
 }
 
 #TODO: add FQDN / Exposed Service Info
@@ -164,13 +164,13 @@ function Get-HardwareConfig {
 
 # create the object
 [PSCustomObject]$masterEndpointRecord = [ordered]@{
-    MDEProperties = Get-MDEProperty
+    GeneralConfig = Get-GeneralConfig
     NetworkConfig = Get-NetworkConfig
     HardwareConfig = Get-HardwareConfig
     }
 
 # log data
-$eventSource = 'DISAMasterEndpointRecord'
+$eventSource = 'MasterEndpointRecord'
 $eventLog = 'System'
 $eventType = 'Information'
 $eventId = 5075
