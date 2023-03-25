@@ -26,6 +26,12 @@ jobs:
       - name: Install wine
         run: sudo apt-get install wine
 
+      - name: Install wine32
+        run: |
+          dpkg --add-architecture i386
+          apt-get update
+          apt-get install wine32
+
       - name: Install libwine
         run: sudo apt-get install libwine
 
