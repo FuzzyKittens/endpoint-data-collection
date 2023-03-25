@@ -1,3 +1,5 @@
+$taskName = 'MasterEndpointRecord'
+
 # remove the scheduled task if exists
 $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -like $taskName }
 if ($taskExists) {

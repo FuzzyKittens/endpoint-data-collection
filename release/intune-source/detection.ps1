@@ -1,4 +1,4 @@
-$taskName = 'DISA-MER'
+$taskName = 'MasterEndpointRecord'
 $taskExists = Get-ScheduledTask | Where-Object {$_.TaskName -eq $taskName}
 
 if($taskExists) {

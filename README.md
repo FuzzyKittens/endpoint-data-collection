@@ -13,9 +13,10 @@ To use this solution, you will need to have your endpoints managed by Intune.  T
 ## Event info
 - **Event ID**: 5075
 - **Event source**: MasterEndpointRecord
+- **Event level**: Information
 
 ## Scheduled task info
-- **Name**: MER
+- **Name**: MasterEndpointRecord
 - **Scheduled**: Daily at 0900 with random offset up to 8 hours
 - **Runtime**: Approximately n Minutes
 
