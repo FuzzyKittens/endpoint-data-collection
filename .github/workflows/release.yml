@@ -31,5 +31,5 @@ jobs:
           git config --global user.email "Kory.Kliner@outlook.com"
 
           git add -A
-          git commit -m "build_ps1"
+          git commit -m "Auto Build"
           git push
