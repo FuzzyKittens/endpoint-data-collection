@@ -25,6 +25,8 @@ jobs:
 
       - name: Install Wine
         run: sudo apt-get install wine
+
+      - name: Install Wine32
         run: sudo apt-get install wine32
 
       - name: Run intunewin utility
