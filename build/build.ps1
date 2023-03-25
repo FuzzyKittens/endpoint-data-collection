@@ -13,4 +13,4 @@ $baseXml.Task.Actions.Exec.Arguments += "`n      "
 $baseXml.Save($releaseXmlPath)
 
 # build intunewin
-.\source\IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
+# .\source\IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
