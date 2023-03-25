@@ -24,7 +24,7 @@ jobs:
         run: ./build/build.ps1
 
       - name: Run intunewin utility
-        run: ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
+        run: cmd.exe /c ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
 
       - name: Commit and push changes
         run: |
