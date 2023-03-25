@@ -4,11 +4,11 @@ This solution collects data on endpoints and drops it into a Windows system even
 
 ## Get started
 
-To use this solution, you will need to have your endpoints managed by Intune.  The latest released intunewin file can be found [here](https://github.com/FuzzyKittens/endpoint-data-collection/blob/main/release/w32-app/install.intunewin).  Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.  For the app settings, use the following:
+To use this solution, you will need to have your endpoints managed by Intune.  The latest released intunewin file can be found [here](/blob/main/release/w32-app/install.intunewin).  Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.  For the app settings, use the following:
 - **Install command**: Powershell.exe -ExecutionPolicy ByPass -File .\install.ps1
 - **Uninstall command**: Powershell.exe -ExecutionPolicy ByPass -File .\uninstall.ps1
 - **Install behavior**: System
-- **Detection Rules**: Use a custom script which can be found [here](https://github.com/FuzzyKittens/endpoint-data-collection/blob/main/release/intune-source/detection.ps1)
+- **Detection Rules**: Use a custom script which can be found [here](/blob/main/release/intune-source/detection.ps1)
 
 ## Event info
 - **Event ID**: 5075
