@@ -1,4 +1,4 @@
-name: CI
+name: Release
 
 on:
   pull_request:
@@ -23,11 +23,14 @@ jobs:
         shell: pwsh
         run: ./build/build.ps1
 
+      - name: Run intunewin utility
+        run: ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
+
       - name: Commit and push changes
         run: |
           git config --global user.name "Kory Kliner"
           git config --global user.email "Kory.Kliner@outlook.com"
 
           git add -A
-          git commit -m "Auto Build"
+          git commit -m "build_ps1"
           git push
