@@ -1,6 +1,6 @@
 # Endpoint Data Collection
 
-This solution collects data on endpoints and drops it into a windows system event on a daily basis through a Windows scheduled task.  The idea with this is to capture endpoint data that can be consumed by an [Azure Log Analytics workspace](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview) through [Data Collection Rules in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection).
+This solution collects data on endpoints and drops it into a Windows system event on a daily basis through a Windows scheduled task.  The idea with this is to capture endpoint data that can be consumed by an [Azure Log Analytics workspace](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview) through [Data Collection Rules in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection).
 
 ## Get started
 
