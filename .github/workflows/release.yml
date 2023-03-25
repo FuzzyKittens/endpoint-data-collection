@@ -12,7 +12,7 @@ jobs:
   build:
     if: github.event.pull_request.merged == true
     name: Build release
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -20,23 +20,10 @@ jobs:
           token: ${{ secrets.endpoint_data_collection_secret }}
 
       - name: Run build script
-        shell: pwsh
         run: ./build/build.ps1
 
-      - name: Install wine
-        run: sudo apt-get install wine
-
-      - name: Install wine32
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install wine32
-
-      - name: Install libwine
-        run: sudo apt-get install libwine
-
       - name: Run intunewin utility
-        run: wine ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
+        run: ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
 
       - name: Commit and push changes
         run: |
