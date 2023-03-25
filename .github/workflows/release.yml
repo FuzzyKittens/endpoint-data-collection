@@ -23,8 +23,11 @@ jobs:
         shell: pwsh
         run: ./build/build.ps1
 
+      - name: Install Wine
+        run: sudo apt-get install wine
+
       - name: Run intunewin utility
-        run: cmd.exe /c ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
+        run: wine ./source/IntuneWinAppUtil.exe -c ".\release\intune-source" -s "install.ps1" -o ".\release\w32-app" -q
 
       - name: Commit and push changes
         run: |
