@@ -1,10 +1,15 @@
 # Endpoint Data Collection
 
-This solution collects data on endpoints and drops it into a Windows system event on a daily basis through a Windows scheduled task.  The idea with this is to capture endpoint data that can be consumed by an [Azure Log Analytics workspace](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview) through [Data Collection Rules in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection).
+This solution collects data on endpoints and drops it into a Windows system event on a daily basis through a Windows scheduled task.
+The idea with this is to capture endpoint data that can be consumed by an [Azure Log Analytics workspace](https://learn.microsoft.com/en-us/azure/azure-monitor/logs/log-analytics-workspace-overview) through [Data Collection Rules in Azure Monitor](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection).
+The [Azure Monitor Agent for Client Devices](https://learn.microsoft.com/en-us/azure/azure-monitor/agents/azure-monitor-agent-windows-client) would be used for Windows 10/11 Endpoints in this architecture.
 
 ## Getting started
 
-To use this solution, you will need to have your endpoints managed by Intune.  The latest released intunewin file can be found in [/release/w32-app/install.intunewin](/release/w32-app/install.intunewin).  Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.
+To use this solution, you will need to have your endpoints managed by Intune.
+The latest released intunewin file can be found in [/release/w32-app/install.intunewin](/release/w32-app/install.intunewin).
+Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.
+
 For the app settings, use the following:
 - **Install command**: Powershell.exe -ExecutionPolicy ByPass -File .\install.ps1
 - **Uninstall command**: Powershell.exe -ExecutionPolicy ByPass -File .\uninstall.ps1
