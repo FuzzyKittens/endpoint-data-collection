@@ -22,48 +22,49 @@ To use this solution, you will need to have your endpoints managed by Intune.  T
 
 ## Collected data
 **GeneralProperties**
-- MasterGUID
-  - This is a deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint
-- MasterGUIDPrevious
-- SenseGUID
-- MDETag
-- ComputerName
-- DomainName
-- Manufacturer
-- Product
-- SerialNumber
+- **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
+- **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
+- **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
+- **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
+- **SenseGUID** *(for mapping to MDE data via MDE MachineId)*
+- **MDETag**
+- **ComputerName**
+- **DomainName**
+- **Manufacturer**
+- **Product**
+- **SerialNumber**
 
 **NetworkConfig**
-- NicID
-- NicVendor
-- NicModel
-- NicDHCPEnabled
-- NicNetworkName
-- NicMACAddress
-- NicIPAddress
-- NicDefaultGateway
-- NicDNSServer
+- **NicID**
+- **NicVendor**
+- **NicModel**
+- **NicDHCPEnabled**
+- **NicNetworkName**
+- **NicMACAddress**
+- **NicIPAddress**
+- **NicDefaultGateway**
+- **NicDNSServer**
 
 **HardwareConfig**
-- MotherboardSN
-- BiosManufacturer
-- BiosVersion
-- BiosGUID
-- TpmVersion
-- TpmEKPublicKey
-- CPU
-- HardDrive
-- Volume
-- OsVendor
-- OsName
-- OsVersion
-- OsBuild
-- OsArchitecture
-- OsEdition
-- OsSupportPlan
-- OsCompositeDispName
-- OsWindowsDeviceId
-- Memory
+- **MotherboardSN**
+- **BiosManufacturer**
+- **BiosVersion**
+- **BiosGUID**
+- **TpmVersion**
+- **TpmEKPublicKey**
+- **CPU**
+- **HardDrive**
+- **Volume**
+- **OsVendor**
+- **OsName**
+- **OsVersion**
+- **OsBuild**
+- **OsArchitecture**
+- **OsEdition**
+- **OsSupportPlan**
+- **OsCompositeDispName**
+- **OsWindowsDeviceId**
+- **Memory**
 
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:

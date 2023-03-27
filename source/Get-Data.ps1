@@ -36,6 +36,7 @@ function Get-GeneralConfig {
 
     $computerSystem = Get-CimInstance win32_computersystem
 
+    # MDE machineId
     $mdeTagRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Advanced Threat Protection\DeviceTagging'
     $mdeTagRegValueName = 'Group'
     $mdeTag = [Microsoft.Win32.Registry]::GetValue($mdeTagRegPath, $mdeTagRegValueName, $null)
@@ -47,9 +48,19 @@ function Get-GeneralConfig {
         $masterGUIDPrevious = $null
     }
 
+    # AAD deviceId
+    $aadDeviceId = $(Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Issuer -like '*CN=MS-Organization-Access*'}).Thumbprint
+
+    # Intune mdmDeviceId
+    $intuneMDMDeviceIdRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\Autopilot\EstablishedCorrelations'
+    $intuneMDMDeviceIdValueName = 'EntDMID'
+    $intuneMDMDeviceId = [Microsoft.Win32.Registry]::GetValue($intuneMDMDeviceIdRegPath, $intuneMDMDeviceIdValueName, $null)
+
     [PSCustomObject]$GeneralConfig = [ordered]@{
         MasterGUID = $masterGuid
         MasterGUIDPrevious = $masterGUIDPrevious
+        AADDeviceGUID = $aadDeviceId
+        IntuneDeviceGUID = $intuneMDMDeviceId
         SenseGUID = $senseGuid
         MDETag = $mdeTag
         ComputerName = $computerSystem.Name
