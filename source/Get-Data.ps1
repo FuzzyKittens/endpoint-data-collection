@@ -49,7 +49,7 @@ function Get-GeneralConfig {
     }
 
     # AAD deviceId
-    $aadDeviceId = $(Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Issuer -like '*CN=MS-Organization-Access*'}).Thumbprint
+    $aadDeviceId = $(Get-ChildItem Cert:\LocalMachine\My | Where-Object {$_.Issuer -like '*CN=MS-Organization-Access*'}).Subject.Replace('CN=','')
 
     # Intune mdmDeviceId
     $intuneMDMDeviceIdRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Provisioning\Diagnostics\Autopilot\EstablishedCorrelations'
