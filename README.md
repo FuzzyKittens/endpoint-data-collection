@@ -4,7 +4,8 @@ This solution collects data on endpoints and drops it into a Windows system even
 
 ## Getting started
 
-To use this solution, you will need to have your endpoints managed by Intune.  The latest released intunewin file can be found in [/release/w32-app/install.intunewin](/release/w32-app/install.intunewin).  Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.  For the app settings, use the following:
+To use this solution, you will need to have your endpoints managed by Intune.  The latest released intunewin file can be found in [/release/w32-app/install.intunewin](/release/w32-app/install.intunewin).  Simply download the file and upload it as a [win32 app](https://learn.microsoft.com/en-us/mem/intune/apps/apps-win32-add) in Intune to be published to your endpoints.
+For the app settings, use the following:
 - **Install command**: Powershell.exe -ExecutionPolicy ByPass -File .\install.ps1
 - **Uninstall command**: Powershell.exe -ExecutionPolicy ByPass -File .\uninstall.ps1
 - **Install behavior**: System
