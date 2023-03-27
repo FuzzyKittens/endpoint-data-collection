@@ -68,22 +68,22 @@ To use this solution, you will need to have your endpoints managed by Intune.  T
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:
 - [Get-Data.ps1](/source/Get-Data.ps1)
-    - This is the main script that collects the data during the scheduled task on the endpoint and writes that data to an event.
+  - This is the main script that collects the data during the scheduled task on the endpoint and writes that data to an event.
 - [Scheduled-TaskBase.xml](/source/Scheduled-TaskBase.xml)
-    - This xml contains the base properties for the scheduled task.
+  - This xml contains the base properties for the scheduled task.
 - [IntuneWinAppUtil.exe](/source/IntuneWinAppUtil.exe)
-    - This is the executable called as part of a release trigger to build the .intunewin file for the w32-app.
+  - This is the executable called as part of a release trigger to build the .intunewin file for the w32-app.
 
 ## Release
 Releases are built automatically through a GitHub action triggered on any file in [/source/](/source/) getting updated through a Pull Request merge.
 The current release can be found in [/release/](/release/) and contains 5 files:
 - [/w32-app/install.intunewin](/release/w32-app/install.intunewin)
-    - This is the w32 app package to be uploaded to Intune
+  - This is the w32 app package to be uploaded to Intune
 - [/intune-source/Scheduled-Task.xml](/release/intune-source/Scheduled-Task.xml)
-    - This is the fully built xml to create the Scheduled task, and is included in the install.intunewin package
+  - This is the fully built xml to create the Scheduled task, and is included in the install.intunewin package
 - [/intune-source/detection.ps1](/release/intune-source/detection.ps1)
-    - This is the detection script to be uploaded to Intune
+  - This is the detection script to be uploaded to Intune
 - [/intune-source/install.ps1](/release/intune-source/install.ps1)
-    - This is the install script used by the w32 app, and is included in the install.intunewin package
+  - This is the install script used by the w32 app, and is included in the install.intunewin package
 - [/intune-source/uninstall.ps1](/release/intune-source/uninstall.ps1)
-    - This is the uninstall script used by the w32 app, and is included in the install.intunewin package
+  - This is the uninstall script used by the w32 app, and is included in the install.intunewin package
