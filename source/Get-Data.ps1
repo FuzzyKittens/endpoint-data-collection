@@ -154,7 +154,7 @@ function Get-HardwareConfig {
     if ($tpmExists) {
         $tpmPublicKey = $(Get-TpmEndorsementKeyInfo -HashAlgorithm sha256).PublicKeyHash
     }
-    
+
     #TODO: some fields need revisit
     $hwConfig = [ordered]@{
         MotherboardSN = $baseBoard.SerialNumber
