@@ -137,6 +137,8 @@ function Get-HardwareConfig {
         $volume += [ordered]@{
             VolumeId = $node.DeviceID
             VolumeSize = $node.Size
+            VolumeUsedSpace = $($node.Size) - $($node.FreeSpace)
+            VolumeFreeSpace = $node.FreeSpace
         }
     }
 
@@ -148,6 +150,11 @@ function Get-HardwareConfig {
         }
     }
 
+    $tpmExists = $(Get-Tpm).TpmPresent
+    if ($tpmExists) {
+        $tpmPublicKey = $(Get-TpmEndorsementKeyInfo -HashAlgorithm sha256).PublicKeyHash
+    }
+    
     #TODO: some fields need revisit
     $hwConfig = [ordered]@{
         MotherboardSN = $baseBoard.SerialNumber
@@ -155,7 +162,7 @@ function Get-HardwareConfig {
         BiosVersion = $bios.SMBIOSBIOSVersion
         BiosGUID = $computerSystemProduct.UUID
         TpmVersion = $baseBoard.SerialNumber
-        TpmEKPublicKey = $(Get-TpmEndorsementKeyInfo -HashAlgorithm sha256).PublicKeyHash
+        TpmEKPublicKey = $tpmPublicKey
         CPU = $cpu
         HardDrive = $hardDrive
         Volume = $volume
