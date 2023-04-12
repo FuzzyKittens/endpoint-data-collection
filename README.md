@@ -27,6 +27,9 @@ For the app settings, use the following:
 - **Scheduled**: Daily at 0900 with random offset up to 8 hours
 - **Runtime**: Less than a 5 seconds
 
+## Data collection rule info
+- **XPath query**: System!*[System[EventID=5075]]
+
 ## Collected data
 **GeneralProperties**
 - **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
@@ -60,8 +63,21 @@ For the app settings, use the following:
 - **TpmVersion**
 - **TpmEKPublicKey**
 - **CPU**
+  - **CpuId**
+  - **CpuManufacturer**
+  - **CpuModel**
+  - **CpuSpeed**
 - **HardDrive**
+  - **HardDriveId**
+  - **HardDriveSize**
+  - **HardDriveUsedSpace**
+  - **HardDriveFreeSpace**
 - **Volume**
+  - **VolumeId**
+  - **VolumeDescription**
+  - **VolumeSize**
+  - **VolumeUsedSpace**
+  - **VolumeFreeSpace**
 - **OsVendor**
 - **OsName**
 - **OsVersion**
@@ -72,6 +88,8 @@ For the app settings, use the following:
 - **OsCompositeDispName**
 - **OsWindowsDeviceId**
 - **Memory**
+  - **Label**
+  - **Capacity**
 
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:

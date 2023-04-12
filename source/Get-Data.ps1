@@ -117,7 +117,7 @@ function Get-HardwareConfig {
         $cpu += [ordered]@{
             CpuId = $node.DeviceId
             CpuSpeed = $node.CurrentClockSpeed
-            CpuManufacturur = $node.Manufacturer
+            CpuManufacturer = $node.Manufacturer
             CpuModel = $node.Name
         }
     }
@@ -136,6 +136,7 @@ function Get-HardwareConfig {
     foreach ($node in $logicalDisk) {
         $volume += [ordered]@{
             VolumeId = $node.DeviceID
+            VolumeDescription = $node.Description
             VolumeSize = $node.Size
             VolumeUsedSpace = $($node.Size) - $($node.FreeSpace)
             VolumeFreeSpace = $node.FreeSpace
