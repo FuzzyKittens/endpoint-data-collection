@@ -36,7 +36,8 @@ For the app settings, use the following:
 - **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
 - **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
 - **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
-- **SenseGUID** *(for mapping to MDE data via MDE MachineId)*
+- **SenseGUID**
+- **MDEMachineId** *(for mapping to MDE data via MDE MachineId)*
 - **MDETag**
 - **ComputerName**
 - **DomainName**

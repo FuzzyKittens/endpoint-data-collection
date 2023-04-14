@@ -34,9 +34,14 @@ function Get-GeneralConfig {
     $senseGuidValueName = 'senseGuid'
     $senseGuid = [Microsoft.Win32.Registry]::GetValue($senseGuidRegPath, $senseGuidValueName, $null)
 
+    # MDE MachineId
+    $mdeMachineIdRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Advanced Threat Protection'
+    $mdeMachineIdValueName = 'senseId'
+    $mdeMachineId = [Microsoft.Win32.Registry]::GetValue($mdeMachineIdRegPath, $mdeMachineIdValueName, $null)
+
     $computerSystem = Get-CimInstance win32_computersystem
 
-    # MDE machineId
+    # MDE tag
     $mdeTagRegPath = 'HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Advanced Threat Protection\DeviceTagging'
     $mdeTagRegValueName = 'Group'
     $mdeTag = [Microsoft.Win32.Registry]::GetValue($mdeTagRegPath, $mdeTagRegValueName, $null)
@@ -62,6 +67,7 @@ function Get-GeneralConfig {
         AADDeviceGUID = $aadDeviceId
         IntuneDeviceGUID = $intuneMDMDeviceId
         SenseGUID = $senseGuid
+        MDEMachineId = $mdeMachineId
         MDETag = $mdeTag
         ComputerName = $computerSystem.Name
         DomainName = $computerSystem.Domain
