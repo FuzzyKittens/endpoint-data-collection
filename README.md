@@ -32,88 +32,88 @@ For the app settings, use the following:
 
 ## Collected data
 **GeneralProperties**
-  - **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
-  - **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
-  - **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
-  - **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
-  - **SenseGUID**
-  - **MDEMachineId** *(for mapping to MDE data via MDE MachineId)*
-  - **MDETag**
-  - **ComputerName**
-  - **DomainName**
-  - **Manufacturer**
-  - **Product**
-  - **SerialNumber**
+- **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
+- **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
+- **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
+- **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
+- **SenseGUID**
+- **MDEMachineId** *(for mapping to MDE data via MDE MachineId)*
+- **MDETag**
+- **ComputerName**
+- **DomainName**
+- **Manufacturer**
+- **Product**
+- **SerialNumber**
 
 **NetworkConfig**
-  - **NetworkInterface**
-    - **NicID**
-    - **NicVendor**
-    - **NicModel**
-    - **NicDHCPEnabled**
-    - **NicNetworkName**
-    - **NicMACAddress**
-  - **FQDN**
-    - **Domain**
-    - **OrganizationalUnit** (TODO)
-    - **DomainType**
-    - **DNSNetbios**
-    - **NetBios**
-    - **HostName**
-  - **ExposedService**
+- **NetworkInterface**
+  - **NicID**
+  - **NicVendor**
+  - **NicModel**
+  - **NicDHCPEnabled**
+  - **NicNetworkName**
+  - **NicMACAddress**
+- **FQDN**
+  - **Domain**
+  - **OrganizationalUnit** (TODO)
+  - **DomainType**
+  - **DNSNetbios**
+  - **NetBios**
+  - **HostName**
+- **ExposedService**
 
 **HardwareConfig**
-  - **DeviceInfo**
-    - **USCYBERCOMCategory** (TODO)
-    - **VirtualizationStatus**
-    - **UpTime**
-    - **MotherboardSerialNumber**
-    - **MotherboardChipset**
-    - **BiosManufacturer**
-    - **BiosVersion**
-    - **BiosGUID**
-    - **TPMVersion**
-    - **TPMEKPublicKey**
-    - **CPEOS**
-    - **OSVendor**
-    - **OSName**
-    - **OSVersion**
-    - **OSBuild**
-    - **OSArchitecture**
-    - **OSEdition**
-    - **SupportPlan** (TODO)
-    - **CompositeDispName** (TODO)
-    - **WindowsDevID**
-    - **SystemDescription**
-    - **ExtendedSupportLicense** (TODO)
-    - **Expiration** (TODO)
-    - **MemorySize**
-    - **Memory**
-      - **Label**
-      - **Capacity**
-  - **CPU**
-    - **CpuId**
-    - **CpuSpeed**
-    - **CpuManufacturer**
-    - **CpuModel**
-  - **HardDrive**
-    - **HardDriveId**
-    - **HardDriveSize**
-    - **HardDriveUsedSpace**
-    - **HardDriveFreeSpace**
-    - **HardDrivePath**
-    - **HardDriveVolume**
-      - **VolumeId**
-      - **VolumeDescription**
-      - **VolumeSize**
-      - **VolumeUsedSpace**
-      - **VolumeFreeSpace**
+- **DeviceInfo**
+  - **USCYBERCOMCategory** (TODO)
+  - **VirtualizationStatus**
+  - **UpTime**
+  - **MotherboardSerialNumber**
+  - **MotherboardChipset**
+  - **BiosManufacturer**
+  - **BiosVersion**
+  - **BiosGUID**
+  - **TPMVersion**
+  - **TPMEKPublicKey**
+  - **CPEOS**
+  - **OSVendor**
+  - **OSName**
+  - **OSVersion**
+  - **OSBuild**
+  - **OSArchitecture**
+  - **OSEdition**
+  - **SupportPlan** (TODO)
+  - **CompositeDispName** (TODO)
+  - **WindowsDevID**
+  - **SystemDescription**
+  - **ExtendedSupportLicense** (TODO)
+  - **Expiration** (TODO)
+  - **MemorySize**
+  - **Memory**
+    - **Label**
+    - **Capacity**
+- **CPU**
+  - **CpuId**
+  - **CpuSpeed**
+  - **CpuManufacturer**
+  - **CpuModel**
+- **HardDrive**
+  - **HardDriveId**
+  - **HardDriveSize**
+  - **HardDriveUsedSpace**
+  - **HardDriveFreeSpace**
+  - **HardDrivePath**
+  - **HardDriveVolume**
+    - **VolumeId**
+    - **VolumeDescription**
+    - **VolumeSize**
+    - **VolumeUsedSpace**
+    - **VolumeFreeSpace**
 
 **UserData**
-  - **UserName**
-  - **SID**
-  - **DomainName**
-  - **UPN**
+- **UserName**
+- **SID**
+- **DomainName**
+- **UPN**
 
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:
