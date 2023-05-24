@@ -57,7 +57,7 @@ For the app settings, use the following:
   - **Domain**
   - **OrganizationalUnit** (TODO)
   - **DomainType**
-  - **DNSNetbios**
+  - **DNS**
   - **NetBios**
   - **HostName**
 - **ExposedService**
