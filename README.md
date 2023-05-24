@@ -14,7 +14,7 @@ For the app settings, use the following:
 - **Install command**: Powershell.exe -ExecutionPolicy ByPass -File .\install.ps1
 - **Uninstall command**: Powershell.exe -ExecutionPolicy ByPass -File .\uninstall.ps1
 - **Install behavior**: System
-- **Detection Rules**: Use a custom script - [/release/intune-source/detection.ps1](/release/intune-source/detection.ps1)
+- **Detection rules**: Use a custom script - [/release/intune-source/detection.ps1](/release/intune-source/detection.ps1)
 
 ## Event info
 - **Event log**: System
@@ -46,51 +46,74 @@ For the app settings, use the following:
 - **SerialNumber**
 
 **NetworkConfig**
-- **NicID**
-- **NicVendor**
-- **NicModel**
-- **NicDHCPEnabled**
-- **NicNetworkName**
-- **NicMACAddress**
-- **NicIPAddress**
-- **NicDefaultGateway**
-- **NicDNSServer**
+- **NetworkInterface**
+  - **NicID**
+  - **NicVendor**
+  - **NicModel**
+  - **NicDHCPEnabled**
+  - **NicNetworkName**
+  - **NicMACAddress**
+- **FQDN**
+  - **Domain**
+  - **OrganizationalUnit** (TODO)
+  - **DomainType**
+  - **DNSNetbios**
+  - **NetBios**
+  - **HostName**
+- **ExposedService**
 
 **HardwareConfig**
-- **MotherboardSN**
-- **BiosManufacturer**
-- **BiosVersion**
-- **BiosGUID**
-- **TpmVersion**
-- **TpmEKPublicKey**
+- **DeviceInfo**
+  - **USCYBERCOMCategory** (TODO)
+  - **VirtualizationStatus**
+  - **UpTime**
+  - **MotherboardSerialNumber**
+  - **MotherboardChipset**
+  - **BiosManufacturer**
+  - **BiosVersion**
+  - **BiosGUID**
+  - **TPMVersion**
+  - **TPMEKPublicKey**
+  - **CPEOS**
+  - **OSVendor**
+  - **OSName**
+  - **OSVersion**
+  - **OSBuild**
+  - **OSArchitecture**
+  - **OSEdition**
+  - **SupportPlan** (TODO)
+  - **CompositeDispName** (TODO)
+  - **WindowsDevID**
+  - **SystemDescription**
+  - **ExtendedSupportLicense** (TODO)
+  - **Expiration** (TODO)
+  - **MemorySize**
+  - **Memory**
+    - **Label**
+    - **Capacity**
 - **CPU**
   - **CpuId**
+  - **CpuSpeed**
   - **CpuManufacturer**
   - **CpuModel**
-  - **CpuSpeed**
 - **HardDrive**
   - **HardDriveId**
   - **HardDriveSize**
   - **HardDriveUsedSpace**
   - **HardDriveFreeSpace**
-- **Volume**
-  - **VolumeId**
-  - **VolumeDescription**
-  - **VolumeSize**
-  - **VolumeUsedSpace**
-  - **VolumeFreeSpace**
-- **OsVendor**
-- **OsName**
-- **OsVersion**
-- **OsBuild**
-- **OsArchitecture**
-- **OsEdition**
-- **OsSupportPlan**
-- **OsCompositeDispName**
-- **OsWindowsDeviceId**
-- **Memory**
-  - **Label**
-  - **Capacity**
+  - **HardDrivePath**
+  - **HardDriveVolume**
+    - **VolumeId**
+    - **VolumeDescription**
+    - **VolumeSize**
+    - **VolumeUsedSpace**
+    - **VolumeFreeSpace**
+
+**UserData**
+- **UserName**
+- **SID**
+- **DomainName**
+- **UPN**
 
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:

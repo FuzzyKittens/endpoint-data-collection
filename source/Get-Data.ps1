@@ -85,39 +85,142 @@ function Get-GeneralConfig {
     return $GeneralConfig
 }
 
-#TODO: add FQDN / Exposed Service Info
 function Get-NetworkConfig {
-    $networkConfig = @()
-    $networkInterfaces = Get-CimInstance -Class Win32_NetworkAdapter | Select-Object *
-    $networkInterfaceConfigurations = Get-CimInstance -Class Win32_NetworkAdapterConfiguration | Select-Object *
-    foreach ($networkInterface in $networkInterfaces) {
-        $networkInterfaceConfiguration = $networkInterfaceConfigurations | Where-Object {$_.InterfaceIndex -eq $networkInterface.Index}
+    #region Network Interface
+    $networkInterface = @()
+    $networkAdapters = Get-CimInstance -ClassName Win32_NetworkAdapter | Select-Object *
+    $networkAdapterConfigurations = Get-CimInstance -ClassName Win32_NetworkAdapterConfiguration | Select-Object *
+    foreach ($networkAdapter in $networkAdapters) {
+        $networkAdapterConfiguration = $networkAdapterConfigurations | Where-Object {$_.Index -eq $networkAdapter.DeviceId}
         $properties = [ordered]@{
-            NicID = $networkInterface.DeviceID
-            NicVendor = $networkInterface.Manufacturer
-            NicModel = $networkInterface.ProductName
-            NicDHCPEnabled = $networkInterfaceConfiguration.DHCPEnabled
-            NicNetworkName = $networkInterfaceConfiguration.DNSDomain
-            NicMACAddress = $networkInterface.MACAddress
-            NicIPAddress = $networkInterfaceConfiguration.IPAddress
-            NicDefaultGateway = $networkInterfaceConfiguration.DefaultIPGateway
-            NicDNSServer = $networkInterfaceConfiguration.DNSServerSearchOrder
+            NicID = $networkAdapter.DeviceID
+            NicVendor = $networkAdapter.Manufacturer
+            NicModel = $networkAdapter.ProductName
+            NicDHCPEnabled = $networkAdapterConfiguration.DHCPEnabled
+            NicNetworkName = $networkAdapterConfiguration.DNSDomain
+            NicMACAddress = $networkAdapter.MACAddress
+            NicIPAddress = $networkAdapterConfiguration.IPAddress
+            NicDefaultGateway = $networkAdapterConfiguration.DefaultIPGateway
+            NicDNSServer = $networkAdapterConfiguration.DNSServerSearchOrder
         }
-        $networkConfig += $properties
+        $networkInterface += $properties
+    }
+    #endregion
+
+    #region FQDN
+    $computerSystem = Get-CimInstance win32_computersystem
+    $domainType = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object -ExpandProperty DomainRole #change to ciminstance?
+
+    switch ($computerSystem.DomainRole) {
+        0 { $domainType = "Standalone Workstation" }
+        1 { $domainType = "Member Workstation" }
+        2 { $domainType = "Standalone Server" }
+        3 { $domainType = "Member Server" }
+        4 { $domainType = "Backup Domain Controller" }
+        5 { $domainType = "Primary Domain Controller" }
+        default { $domainType = "Unknown" }
+    }
+    $fqdn = [ordered]@{
+        Domain = $computerSystem.Domain
+        OrganizationalUnit = 'TODO'
+        DomainType = $domainType
+        DNS = $computerSystem.DNSHostName
+        NetBios = 'N/A'
+        HostName = $env:COMPUTERNAME
+        }
+    #endregion
+
+    #region Exposed Service
+    $exposedService = @()
+    $interestingPorts = @{
+        DomainController = 389 #need to also check if it's only an LDAP server
+        ManagedDomain = 0
+        DNSServer = 53
+        NTPServer = 123
+        FileServer = 445 #also looking for LanmanServer service running? or maybe get-smbshare?
+        WebServer = 80
+        WebServerHttps = 443
+        DKC = 0
+        TGS = 88
+        AttributeRepo = 0
+        LDAPDirectory = 389
+        X500Directory = 389
+    }
+
+    $listeningServices = Get-NetTCPConnection -State Listen
+    foreach ($interestingPort in $interestingPorts.Keys) {
+        if ($listeningServices.localport -contains $interestingPorts[$interestingPort]) {
+            $exposedService += $interestingPort
+        }
+    }
+    #endregion
+
+    [PSCustomObject]$networkConfig = [ordered]@{
+    NetworkInterface = $networkInterface
+    FQDN = $fqdn
+    ExposedService = $exposedService
     }
     return $networkConfig
 }
 
 function Get-HardwareConfig {
-    $baseBoard = Get-CimInstance -Class Win32_BaseBoard | Select-Object *
-    $bios = Get-CimInstance -Class Win32_Bios | Select-Object *
-    $computerSystemProduct = Get-CimInstance -Class Win32_ComputerSystemProduct | Select-Object *
-    $processor = Get-CimInstance -Class Win32_Processor | Select-Object *
-    $physicalDisk = Get-CimInstance -Class Win32_DiskDrive | Select-Object *
-    $logicalDisk = Get-CimInstance -Class win32_LogicalDisk | Select-Object *
-    $operatingSystem = Get-CimInstance -Class win32_OperatingSystem | Select-Object *
-    $physicalMemory = Get-CimInstance -Class win32_PhysicalMemory | Select-Object *
+    $baseBoard = Get-CimInstance -ClassName Win32_BaseBoard | Select-Object *
+    $bios = Get-CimInstance -ClassName Win32_Bios | Select-Object *
+    $computerSystem = Get-CimInstance -ClassName Win32_ComputerSystem | Select-Object *
+    $computerSystemProduct = Get-CimInstance -ClassName Win32_ComputerSystemProduct | Select-Object *
+    $processor = Get-CimInstance -ClassName Win32_Processor | Select-Object *
+    $operatingSystem = Get-CimInstance -ClassName win32_OperatingSystem | Select-Object *
+    $physicalMemory = Get-CimInstance -ClassName win32_PhysicalMemory | Select-Object *
+    $tpmExists = $(Get-Tpm).TpmPresent
+    if ($tpmExists) {
+        $tpmPublicKey = $(Get-TpmEndorsementKeyInfo -HashAlgorithm sha256).PublicKeyHash
+    }
+    $virtualized = $false
+    if ($computerSystem.Model.Contains('Virtual')) {
+        $virtualized = $true
+    }
 
+    $memory = @()
+    $totalMemory = 0
+    foreach ($node in $physicalMemory) {
+        $memory += [ordered]@{
+            Label = $node.BankLabel
+            Capacity = $node.Capacity
+        }
+        $totalMemory += $node.Capacity
+    }
+
+    #region Device Info
+    $deviceInfo = [ordered]@{
+        USCYBERCOMCategory = 'TODO'
+        VirtualizationStatus = $virtualized
+        UpTime = (Get-Date) - $operatingSystem.LastBootUpTime
+        MotherboardSerialNumber = $baseBoard.SerialNumber
+        MotherboardChipset = $baseBoard.Product
+        BiosManufacturer = $bios.Manufacturer
+        BiosVersion = $bios.SMBIOSBIOSVersion
+        BiosGUID = $computerSystemProduct.UUID
+        TPMVersion = $baseBoard.SerialNumber
+        TPMEKPublicKey = $tpmPublicKey
+        CPEOS = $operatingSystem.Caption
+        OSVendor = $operatingSystem.Manufacturer
+        OSName = $operatingSystem.Name
+        OSVersion = $operatingSystem.Version
+        OSBuild = $operatingSystem.BuildNumber
+        OSArchitecture = $operatingSystem.OSArchitecture
+        OSEdition = $operatingSystem.BuildType
+        SupportPlan = 'TODO'
+        CompositeDispName = 'TODO'
+        WindowsDevID = $operatingSystem.SerialNumber
+        SystemDescription = $computerSystem.Description
+        ExtendedSupportLicense = 'TODO'
+        Expiration = 'TODO'
+        MemorySize = $($totalMemory / 1MB)
+        Memory = $memory
+    }
+    #endregion
+
+    #region CPU
     $cpu = @()
     foreach ($node in $processor) {
         $cpu += [ordered]@{
@@ -127,65 +230,93 @@ function Get-HardwareConfig {
             CpuModel = $node.Name
         }
     }
+    #endregion
 
+    #region HardDrive
+    $physicalDisks = Get-CimInstance -ClassName Win32_DiskDrive -KeyOnly
     $hardDrive = @()
-    foreach ($node in $physicalDisk) {
+    foreach ($physicalDisk in $physicalDisks) {
+        $volumes = @()
+        $freeSpace = 0
+        $partitions = Get-CimAssociatedInstance -InputObject $physicalDisk -ResultClassName win32_DiskPartition -KeyOnly
+        foreach ($partition in $partitions) {
+            $logicalDisks = Get-CimAssociatedInstance -InputObject $partition -ResultClassName Win32_LogicalDisk
+            foreach ($logicalDisk in $logicalDisks) {
+                $freeSpace += $logicalDisk.FreeSpace
+                $volumes += [ordered]@{
+                    VolumeId = $logicalDisk.DeviceID
+                    VolumeDescription = $logicalDisk.Description
+                    VolumeSize = [math]::Round($($logicalDisk.Size / 1MB))
+                    VolumeUsedSpace = [math]::Round($(($logicalDisk.Size - $logicalDisk.FreeSpace) / 1MB))
+                    VolumeFreeSpace = [math]::Round($($logicalDisk.FreeSpace / 1MB))
+                }
+            }
+        }
+        $physicalDiskInstance = Get-CimInstance -InputObject $physicalDisk | Select-Object *
         $hardDrive += [ordered]@{
-            HardDriveId = $node.DeviceID
-            HardDriveSize = $node.Size
-            HardDriveUsedSpace = 'TODO'
-            HardDriveFreeSpace = 'TODO'
+            HardDriveId = $physicalDiskInstance.Index
+            HardDriveSize = [math]::Round($($physicalDiskInstance.Size / 1MB), 0)
+            HardDriveUsedSpace = [math]::Round($(($physicalDiskInstance.Size - $freeSpace) / 1MB))
+            HardDriveFreeSpace = [math]::Round($($freeSpace / 1MB))
+            HardDrivePath = $physicalDiskInstance.DeviceID
+            HardDriveVolume = $volumes
         }
     }
+    #endregion
 
-    $volume = @()
-    foreach ($node in $logicalDisk) {
-        $volume += [ordered]@{
-            VolumeId = $node.DeviceID
-            VolumeDescription = $node.Description
-            VolumeSize = $node.Size
-            VolumeUsedSpace = $($node.Size) - $($node.FreeSpace)
-            VolumeFreeSpace = $node.FreeSpace
-        }
-    }
-
-    $memory = @()
-    foreach ($node in $physicalMemory) {
-        $memory += [ordered]@{
-            Label = $node.BankLabel
-            Capacity = $node.Capacity
-        }
-    }
-
-    $tpmExists = $(Get-Tpm).TpmPresent
-    if ($tpmExists) {
-        $tpmPublicKey = $(Get-TpmEndorsementKeyInfo -HashAlgorithm sha256).PublicKeyHash
-    }
-
-    #TODO: some fields need revisit
     $hwConfig = [ordered]@{
-        MotherboardSN = $baseBoard.SerialNumber
-        BiosManufacturer = $bios.Manufacturer
-        BiosVersion = $bios.SMBIOSBIOSVersion
-        BiosGUID = $computerSystemProduct.UUID
-        TpmVersion = $baseBoard.SerialNumber
-        TpmEKPublicKey = $tpmPublicKey
+        DeviceInfo = $deviceInfo
         CPU = $cpu
         HardDrive = $hardDrive
-        Volume = $volume
-        OsVendor = $operatingSystem.Manufacturer
-        OsName = $operatingSystem.Caption
-        OsVersion = $operatingSystem.Version
-        OsBuild = $operatingSystem.BuildNumber
-        OsArchitecture = $operatingSystem.OSArchitecture
-        OsEdition = $operatingSystem.BuildType
-        OsSupportPlan = 'TODO'
-        OsCompositeDispName = $operatingSystem.Name
-        OsWindowsDeviceId = $operatingSystem.SerialNumber #need to revisit
-        Memory = $memory
     }
     return $hwConfig
 }
+
+function Get-SoftwareConfig {
+    $installedApps = Get-CimInstance -ClassName Win32_Product
+    $results = @()
+
+    foreach ($app in $installedApps) {
+        $lastRunTime = Get-ItemProperty "HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\$($app.IdentifyingNumber)" | Select-Object -ExpandProperty InstallDate
+        $results += [PSCustomObject] @{
+            "Name" = $app.Name
+            "Version" = $app.Version
+            "Last Run Time" = $lastRunTime
+        }
+    }
+    $results | Sort-Object -Property "Name" | Format-Table -AutoSize
+}
+
+function Get-OperationalContext {
+    return 'TODO'
+}
+
+function Get-VulnResult {
+    return 'TODO'
+}
+
+function Get-UserData {
+    $logonCache = Get-ChildItem -Path 'HKLM:\SOFTWARE\Microsoft\IdentityStore\LogonCache'
+
+    $users = @()
+    foreach ($node in $logonCache) {
+        $path = "HKLM:\SOFTWARE\Microsoft\IdentityStore\LogonCache\$($node.PSChildName)\Name2Sid"
+        $validPath = Test-Path -Path $path
+        if ($validPath) {
+            $subPaths = Get-ChildItem -Path $path
+            foreach ($subPath in $subPaths) {
+                $users += @{
+                    'UPN' = $subPath.GetValue('IdentityName')
+                    'UserName' = $subPath.GetValue('IdentityName').Split('@')[0]
+                    'Domain' = $subPath.GetValue('AuthenticatingAuthority')
+                    'SID' = $subPath.GetValue('Sid')
+                }
+            }
+        }
+    }
+    return $users
+}
+
 
 try {
     # create the object
@@ -193,6 +324,10 @@ try {
         GeneralConfig = Get-GeneralConfig
         NetworkConfig = Get-NetworkConfig
         HardwareConfig = Get-HardwareConfig
+        SoftwareConfig = 'TODO'
+        OperationalContext = 'TODO'
+        VulnResults = 'TODO'
+        UserData = Get-UserData
         }
 
     # log data
