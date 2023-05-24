@@ -14,7 +14,7 @@ For the app settings, use the following:
 - **Install command**: Powershell.exe -ExecutionPolicy ByPass -File .\install.ps1
 - **Uninstall command**: Powershell.exe -ExecutionPolicy ByPass -File .\uninstall.ps1
 - **Install behavior**: System
-- **Detection Rules**: Use a custom script - [/release/intune-source/detection.ps1](/release/intune-source/detection.ps1)
+- **Detection rules**: Use a custom script - [/release/intune-source/detection.ps1](/release/intune-source/detection.ps1)
 
 ## Event info
 - **Event log**: System
@@ -32,65 +32,88 @@ For the app settings, use the following:
 
 ## Collected data
 **GeneralProperties**
-- **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
-- **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
-- **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
-- **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
-- **SenseGUID**
-- **MDEMachineId** *(for mapping to MDE data via MDE MachineId)*
-- **MDETag**
-- **ComputerName**
-- **DomainName**
-- **Manufacturer**
-- **Product**
-- **SerialNumber**
+  - **MasterGUID** *(deterministic GUID created from a set of endpoint properties which should always be the same for the life of an endpoint)*
+  - **MasterGUIDPrevious** *(in the unlikely situation the MasterGUID has changed, this property will contain the previous MasterGUID)*
+  - **AADDeviceGUID** *(for mapping to AAD data via AAD deviceId)*
+  - **IntuneDeviceGUID** *(for mapping to Intune data via Intune deviceId)*
+  - **SenseGUID**
+  - **MDEMachineId** *(for mapping to MDE data via MDE MachineId)*
+  - **MDETag**
+  - **ComputerName**
+  - **DomainName**
+  - **Manufacturer**
+  - **Product**
+  - **SerialNumber**
 
 **NetworkConfig**
-- **NicID**
-- **NicVendor**
-- **NicModel**
-- **NicDHCPEnabled**
-- **NicNetworkName**
-- **NicMACAddress**
-- **NicIPAddress**
-- **NicDefaultGateway**
-- **NicDNSServer**
+  - **NetworkInterface**
+    - **NicID**
+    - **NicVendor**
+    - **NicModel**
+    - **NicDHCPEnabled**
+    - **NicNetworkName**
+    - **NicMACAddress**
+  - **FQDN**
+    - **Domain**
+    - **OrganizationalUnit** (TODO)
+    - **DomainType**
+    - **DNSNetbios**
+    - **NetBios**
+    - **HostName**
+  - **ExposedService**
 
 **HardwareConfig**
-- **MotherboardSN**
-- **BiosManufacturer**
-- **BiosVersion**
-- **BiosGUID**
-- **TpmVersion**
-- **TpmEKPublicKey**
-- **CPU**
-  - **CpuId**
-  - **CpuManufacturer**
-  - **CpuModel**
-  - **CpuSpeed**
-- **HardDrive**
-  - **HardDriveId**
-  - **HardDriveSize**
-  - **HardDriveUsedSpace**
-  - **HardDriveFreeSpace**
-- **Volume**
-  - **VolumeId**
-  - **VolumeDescription**
-  - **VolumeSize**
-  - **VolumeUsedSpace**
-  - **VolumeFreeSpace**
-- **OsVendor**
-- **OsName**
-- **OsVersion**
-- **OsBuild**
-- **OsArchitecture**
-- **OsEdition**
-- **OsSupportPlan**
-- **OsCompositeDispName**
-- **OsWindowsDeviceId**
-- **Memory**
-  - **Label**
-  - **Capacity**
+  - **DeviceInfo**
+    - **USCYBERCOMCategory** (TODO)
+    - **VirtualizationStatus**
+    - **UpTime**
+    - **MotherboardSerialNumber**
+    - **MotherboardChipset**
+    - **BiosManufacturer**
+    - **BiosVersion**
+    - **BiosGUID**
+    - **TPMVersion**
+    - **TPMEKPublicKey**
+    - **CPEOS**
+    - **OSVendor**
+    - **OSName**
+    - **OSVersion**
+    - **OSBuild**
+    - **OSArchitecture**
+    - **OSEdition**
+    - **SupportPlan** (TODO)
+    - **CompositeDispName** (TODO)
+    - **WindowsDevID**
+    - **SystemDescription**
+    - **ExtendedSupportLicense** (TODO)
+    - **Expiration** (TODO)
+    - **MemorySize**
+    - **Memory**
+      - **Label**
+      - **Capacity**
+  - **CPU**
+    - **CpuId**
+    - **CpuSpeed**
+    - **CpuManufacturer**
+    - **CpuModel**
+  - **HardDrive**
+    - **HardDriveId**
+    - **HardDriveSize**
+    - **HardDriveUsedSpace**
+    - **HardDriveFreeSpace**
+    - **HardDrivePath**
+    - **HardDriveVolume**
+      - **VolumeId**
+      - **VolumeDescription**
+      - **VolumeSize**
+      - **VolumeUsedSpace**
+      - **VolumeFreeSpace**
+
+**UserData**
+  - **UserName**
+  - **SID**
+  - **DomainName**
+  - **UPN**
 
 ## Source code
 The source code can be found in [/source/](/source/) and consists of three main files:
