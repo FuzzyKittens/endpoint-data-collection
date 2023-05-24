@@ -291,7 +291,7 @@ function Get-OperationalContext {
     return 'TODO'
 }
 
-function Get-VulnResults {
+function Get-VulnResult {
     return 'TODO'
 }
 
